@@ -1,0 +1,147 @@
+{% extends "layout.html" %} {% block title %} Index {% endblock %} {% block main
+%}
+<div class="d-flex justify-content-center">
+  <div class="mr-sm-5">
+    <h4>Your destinations</h4>
+    <form class="mb-5" action="/" method="POST">
+      <div class="form-group">
+        <input
+          autocomplete="off"
+          autofocus
+          class="form-control w-auto"
+          name="location"
+          placeholder="Location"
+          type="text"
+        />
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Add Location</button>
+    </form>
+  </div>
+  <div class="mr-sm-5">
+    <h4>You fly from: {{ home }}</h4>
+    <form class="mb-5" action="/" method="POST">
+      <div class="form-group">
+        <input
+          autocomplete="off"
+          autofocus
+          class="form-control w-auto"
+          name="city"
+          placeholder="City"
+          type="text"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          autocomplete="off"
+          autofocus
+          class="form-control w-auto"
+          name="country"
+          placeholder="Country"
+          type="text"
+        />
+      </div>
+      <button class="btn btn-primary w-100" type="submit">
+        Change airport
+      </button>
+    </form>
+  </div>
+  <div>
+    <h4>Dates</h4>
+    <form class="mb-5" action="/" method="POST">
+      <div class="form-group">
+        <select class="form-control w-100" name="date" id="date">
+          <option value="2020-12">2020-12</option>
+          <option value="2021-01">2021-01</option>
+          <option value="2021-02">2021-02</option>
+          <option value="2021-03">2021-03</option>
+          <option value="2021-04">2021-04</option>
+        </select>
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Change dates</button>
+    </form>
+  </div>
+</div>
+
+{% if locations %}
+<div class="row">
+  {% for location in locations %}
+  <div class="card col-sm-4 p-2 border-0">
+    <div class="card-inner border border-primary">
+      {% if location[0]['temp'] <= 0 %}
+      <img
+        class="card-img-top rounded-0"
+        src="https://images.pexels.com/photos/941737/pexels-photo-941737.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        alt="Card image cap"
+      />
+      {% endif %} {% if (location[0]['temp'] > 0) and (location[0]['temp'] <=
+      10) %}
+      <img
+        class="card-img-top rounded-0"
+        src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        alt="Card image cap"
+      />
+      {% endif %}{% if (location[0]['temp'] > 10) and (location[0]['temp'] <=
+      15) %}
+      <img
+        class="card-img-top rounded-0"
+        src="https://images.pexels.com/photos/4406222/pexels-photo-4406222.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        alt="Card image cap"
+      />
+      {% endif %} {% if (location[0]['temp'] > 15) and (location[0]['temp'] <=
+      22) %}
+      <img
+        class="card-img-top rounded-0"
+        src="https://images.pexels.com/photos/1683974/pexels-photo-1683974.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        alt="Card image cap"
+      />
+      {% endif %} {% if location[0]['temp'] > 22 %}
+      <img
+        class="card-img-top rounded-0"
+        src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        alt="Card image cap"
+      />
+      {% endif %}
+      <div class="card-body text-center">
+        <h3 class="card-title">{{ location[0]['name'] }}</h3>
+        <h5 class="card-title">{{ location[0]['country'] }}</h5>
+        <p>
+          {{ location[0]['temp'] }}°C
+          <span class="ml-3">Time: {{ location[0]['time'] }}</span>
+        </p>
+        <img src="{{ location[0]['icon']}}" />
+        <p class="text-center">{{ location[0]['text'] }}</p>
+        <p class="text-center">Airport: {{ location[1] }}</p>
+        <p class="text-center">
+          <span class="font-weight-bold">Direct Flight:</span> <br />
+          {% if location[2]['direct'] != None %} Price: €{{
+          location[2]['direct']['price'] }} <br />
+          Date: {{ location[2]['direct']['date'] }} <br />
+          {% else %} None {% endif %}
+        </p>
+        <p class="text-center">
+          <span class="font-weight-bold">Indirect Flight:</span> <br />{% if
+          location[2]['indirect'] != None %} Price: €{{
+          location[2]['indirect']['price'] }} <br />
+          Date: {{ location[2]['indirect']['date'] }} <br />
+          {% else %} None {% endif %}
+        </p>
+        <form action="/" method="POST">
+          <div class="form-group">
+            <input
+              autocomplete="off"
+              autofocus
+              class="hide"
+              name="delete"
+              placeholder="Location"
+              type="text"
+              value="{{ location[0]['name'] }}"
+            />
+          </div>
+          <button class="btn btn-primary" type="submit">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% endblock %}
